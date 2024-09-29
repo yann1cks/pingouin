@@ -32,8 +32,8 @@ jobs:
     - name: Enable github problem matcher
       uses: sphinx-doc/github-problem-matcher@master
     - name: Install dependencies
-        run: >
-          pip install -U pip setuptools wheel
+        run: |
+          pip install -U pip setuptools wheel \
           pip install .[docs]
     - name: Sphinx build
       run: >

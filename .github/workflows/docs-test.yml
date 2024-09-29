@@ -38,11 +38,11 @@ jobs:
     - name: Sphinx build
       run: >
         sphinx-build
-        -M html ./docs ./_builds
+        -M html ./docs ./docs/_builds
         -vv
         --jobs=auto
         --show-traceback
-    
+        --fail-on-warning
     - name: Setup Pages
       uses: actions/configure-pages@v4
     - name: Upload artifact

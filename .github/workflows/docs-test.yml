@@ -38,7 +38,7 @@ jobs:
     - name: Sphinx build
       run: >
         sphinx-build
-        -M html ./docs ./docs/_builds
+        -b html ./docs ./docs/_builds
         -v
         --jobs=auto
         --show-traceback

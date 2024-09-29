@@ -4,9 +4,17 @@ on:
   push:
     branches: [main] # branch to trigger deployment
 
+
+# Cancel any in-progress job or run
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+
 jobs:
   pages:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -14,5 +22,41 @@ jobs:
       pages: write
       id-token: write
     steps:
+    #- id: deployment
+    #  uses: sphinx-notes/pages@v3
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Enable github problem matcher
+      uses: sphinx-doc/github-problem-matcher@master
+
+    - name: Install dependencies
+        run: |
+          pip install -U pip setuptools wheel
+          pip install .[docs]
+    
+    - name: Sphinx build
+      run: >
+        sphinx-build
+        -M html ./doc ./build/sphinx
+        -vv
+        --jobs=auto
+        --show-traceback
+        --fail-on-warning
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        # Path to build dir
+        path: './docs/_builds'
+      
     - id: deployment
-      uses: sphinx-notes/pages@v3
+      name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v4

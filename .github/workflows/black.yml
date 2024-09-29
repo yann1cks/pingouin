@@ -9,3 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
       - uses: sphinx-doc/github-problem-matcher@master
+      - name: "Build docs"
+        run: |
+          cd docs
+          make html

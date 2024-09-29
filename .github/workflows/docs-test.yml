@@ -29,15 +29,12 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.12'
-
     - name: Enable github problem matcher
       uses: sphinx-doc/github-problem-matcher@master
-
     - name: Install dependencies
         run: |
           pip install -U pip setuptools wheel
           pip install .[docs]
-    
     - name: Sphinx build
       run: >
         sphinx-build
@@ -46,16 +43,13 @@ jobs:
         --jobs=auto
         --show-traceback
         --fail-on-warning
-
     - name: Setup Pages
       uses: actions/configure-pages@v4
-
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
         # Path to build dir
         path: './docs/_builds'
-      
     - id: deployment
       name: Deploy to GitHub Pages
       uses: actions/deploy-pages@v4
